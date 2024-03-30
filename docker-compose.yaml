@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  generator:
+    networks:
+      - service-net
+    image: p4elll/flash_cards_generator:latest
+    ports:
+      - 8082:8082
+    env_file:
+      - .env
+  auth:
+    networks:
+      - service-net
+    image: p4elll/auth_nate_service:latest
+    ports:
+      - 8081:8081
+    env_file:
+      - .env
+  nginx:
+    networks:
+      - service-net
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    restart: always
+    env_file:
+      - .env
+networks:
+  service-net:
+    driver: bridge
