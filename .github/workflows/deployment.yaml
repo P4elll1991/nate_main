@@ -16,7 +16,10 @@ jobs:
 
       - name: Restart Docker Compose
         run: |
-          ssh root@178.128.47.82 'cd ~/apps/nate_main  && docker-compose down && docker-compose pull && docker-compose up -d'
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -i ~/.ssh/id_rsa root@178.128.47.82 'cd ~/apps/nate_main  && docker-compose down && docker-compose pull && docker-compose up -d'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
