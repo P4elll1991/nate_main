@@ -40,15 +40,10 @@ server {
 
 server {
     listen 443 ssl;
-    server_name example.com;
+    server_name nate-ai.com;
 
-    ssl_certificate /etc/certificates/nate-ai.com/fullchain.pem;
-    ssl_certificate_key /etc/certificates/nate-ai.com/privkey.pem;
-
-    # Настройте протоколы и шифры SSL по своему усмотрению
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_prefer_server_ciphers on;
-    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+    ssl_certificate /etc/letsencrypt/live/nate-ai.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/nate-ai.com/privkey.pem;
 
    location /proxy  {
         # Проверка токена через сервис авторизации
@@ -58,7 +53,7 @@ server {
         proxy_set_header Authorization "Bearer $FLASH_CARDS_OPEN_AI_API_KEY";
         proxy_pass https://api.openai.com;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme; 
+        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_ssl_server_name on;
     }
 
@@ -69,7 +64,7 @@ server {
         rewrite ^/generator/(.*)$ /$1 break;
         proxy_pass "http://generator:$FLASH_CARDS_GENERATOR_PORT";
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme; 
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 
     location = /check {
@@ -84,3 +79,4 @@ server {
         proxy_pass "http://auth:$AUTH_SERVER_PORT/check";
     }
 }
+
