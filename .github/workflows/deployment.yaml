@@ -19,11 +19,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@178.128.47.82 'cd ~/apps/nate_main /
-           && docker-compose down / 
-           && git fetch && git rebase / 
-           && docker-compose pull /
-           && docker-compose up -d'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@178.128.47.82 'cd ~/apps/nate_main && docker-compose down'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@178.128.47.82 'cd ~/apps/nate_main && git fetch && git rebase'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@178.128.47.82 'cd ~/apps/nate_main && docker-compose pull && docker-compose up -d'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
