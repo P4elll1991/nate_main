@@ -4,7 +4,7 @@ services:
   generator:
     networks:
       - service-net
-    image: p4elll/auth_nate_service:latest
+    image: p4elll/flash_cards_generator:latest
     ports:
       - 8082:8082
     env_file:
