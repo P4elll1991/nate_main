@@ -1,46 +1,6 @@
 server {
     listen 80;
-    server_name nate_main;
-    root /var/www/example.com/;
-
-    location /proxy  {
-        # Проверка токена через сервис авторизации
-        auth_request /check;
-
-        rewrite ^/proxy/(.*)$ /$1 break;
-        proxy_set_header Authorization "Bearer $FLASH_CARDS_OPEN_AI_API_KEY";
-        proxy_pass https://api.openai.com;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme; 
-        proxy_ssl_server_name on;
-    }
-
-    location /generator  {
-        # Проверка токена через сервис авторизации
-        auth_request /check;
-
-        rewrite ^/generator/(.*)$ /$1 break;
-        proxy_pass "http://generator:$FLASH_CARDS_GENERATOR_PORT";
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme; 
-    }
-
-    location = /check {
-        internal;
-        proxy_pass_request_headers on;
-        proxy_pass_request_body on;
-        proxy_set_header Content-Length "";
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Original-URI $request_uri;
-        proxy_set_header X-Original-Method $request_method;
-        proxy_set_header X-Original-Remote-Addr $remote_addr;
-        proxy_pass "http://auth:$AUTH_SERVER_PORT/check";
-    }
-}
-
-server {
-    listen 443;
-    server_name nate_main_ssl;
+    server_name localhost;
     root /var/www/example.com/;
 
     location /proxy  {
