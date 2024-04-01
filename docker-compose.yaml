@@ -25,6 +25,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./www:/home/www
       - ./default.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./certs/letsencrypt/archive/nate-ai.com/fullchain1.pem:/etc/letsencrypt/live/nate-ai.com/fullchain.pem
       - ./certs/letsencrypt/archive/nate-ai.com/privkey1.pem:/etc/letsencrypt/live/nate-ai.com/privkey.pem
