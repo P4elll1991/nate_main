@@ -3,15 +3,19 @@ server {
     server_name nginx;
     root /var/www/example.com/;
 
+    location ^~ /.well-known/acme-challenge/ {
+        alias /home/www/certbot/.well-known/acme-challenge/;
+    }
+
     location /proxy  {
         # Проверка токена через сервис авторизации
         auth_request /check;
 
         rewrite ^/proxy/(.*)$ /$1 break;
-        proxy_set_header Authorization "Bearer $FLASH_CARDS_OPEN_AI_API_KEY";
+        proxy_set_header Authorization "Bearer $PROXY_OPEN_AI_API_KEY";
         proxy_pass https://api.openai.com;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme; 
+        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_ssl_server_name on;
     }
 
@@ -22,7 +26,7 @@ server {
         rewrite ^/generator/(.*)$ /$1 break;
         proxy_pass "http://generator:$FLASH_CARDS_GENERATOR_PORT";
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme; 
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 
     location = /check {
@@ -50,7 +54,7 @@ server {
         auth_request /check;
 
         rewrite ^/proxy/(.*)$ /$1 break;
-        proxy_set_header Authorization "Bearer $FLASH_CARDS_OPEN_AI_API_KEY";
+        proxy_set_header Authorization "Bearer $PROXY_OPEN_AI_API_KEY";
         proxy_pass https://api.openai.com;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -79,4 +83,3 @@ server {
         proxy_pass "http://auth:$AUTH_SERVER_PORT/check";
     }
 }
-
