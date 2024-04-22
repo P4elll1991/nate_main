@@ -4,7 +4,7 @@ services:
   generator:
     networks:
       - service-net
-    image: p4elll/flash_cards_generator:latest
+    image: nocksllc/flash_cards_generator:latest
     ports:
       - 8082:8082
     env_file:
@@ -12,7 +12,7 @@ services:
   auth:
     networks:
       - service-net
-    image: p4elll/auth_nate_service:latest
+    image: nocksllc/auth_nate_service:latest
     ports:
       - 8081:8081
     env_file:
